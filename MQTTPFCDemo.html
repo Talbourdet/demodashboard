@@ -1,0 +1,61 @@
+<script nomodule src="https://unpkg.com/@senx/discovery-widgets/dist/discovery/discovery.js"></script>
+<script type="module" src="https://unpkg.com/@senx/discovery-widgets/dist/discovery/discovery.esm.js"></script>
+
+<html>
+<head>
+  <title>Suivi niveau cuve</title>
+</head>
+<body>
+<discovery-dashboard url="https://warp10.hexa-ai.fr/api/v0/exec" dashboard-title="Suivi niveau cuve">
+  {
+  'title' 'Suivi niveau cuve'
+  'description' 'Donnée remontées en MQTT depuis automate de démonstration Hexa-AI'
+  'tiles' [
+  {
+  'title' 'Historique niveau (Litres) 24 dernières heures'
+  'options' { 'autoRefresh' 0.5 }
+  'x' 3 'y' 0 'w' 9 'h' 2
+  'type' 'area' 'macro' <%
+   'AaWLXTKf28UWlw6q5bBSyf7VnUetNJWfcngcZXiJ6QsKOTBY0CbRsEIJmuiMn3fh2C0jRYhumE0q5NaUZufpvQjLlgV_v_jThrndL7e3ooZTzubdarIZP9FXUSg7VPgcrtWHw5rDVJgNNsivKaI1UvZI8TfxISpr' 'readToken' STORE
+
+
+
+{
+    'token' $readToken
+    'class' 'NiveauCuve'
+    'labels' {}
+    'end' NOW
+    'start' NOW 24 h -
+} FETCH 'datas' STORE
+
+
+$datas
+   %>
+  }
+  {
+  'title' 'Niveau actuel (Litres)'
+  'options' { 'autoRefresh' 0.5 }
+  'x' 0 'y' 0 'w' 3 'h' 2
+  'type' 'display' 'macro' <%
+   'AaWLXTKf28UWlw6q5bBSyf7VnUetNJWfcngcZXiJ6QsKOTBY0CbRsEIJmuiMn3fh2C0jRYhumE0q5NaUZufpvQjLlgV_v_jThrndL7e3ooZTzubdarIZP9FXUSg7VPgcrtWHw5rDVJgNNsivKaI1UvZI8TfxISpr' 'readToken' STORE
+
+
+
+{
+    'token' $readToken
+    'class' 'NiveauCuve'
+    'labels' {}
+    'end' NOW
+    'start' NOW 24 h -
+    'count' 1
+} FETCH 'datas' STORE
+
+
+$datas 0 GET VALUES 0 GET
+   %>
+  }
+  ]
+  }
+</discovery-dashboard>
+</body>
+</html>
