@@ -55,7 +55,7 @@ body {
 
 {
     'token' $readToken
-    'class' 'NiveauCuve'
+    'class' '~(NiveauCuve|NbBoitesProduites)'
     'labels' {}
     'end' NOW
     'start' NOW 2 h -
@@ -87,6 +87,49 @@ $datas
 $datas 0 GET VALUES 0 GET
    %>
   }
+  {
+    'title' 'Historique des défaut moteur convoyeur'
+    'options' { 'autoRefresh' 0.5 }
+    'x' 0 'y' 2 'w' 12 'h' 2
+    'type' 'area' 'macro' <%
+     'AaWLXTKf28UWlw6q5bBSyf7VnUetNJWfcngcZXiJ6QsKOTBY0CbRsEIJmuiMn3fh2C0jRYhumE0q5NaUZufpvQjLlgV_v_jThrndL7e3ooZTzubdarIZP9FXUSg7VPgcrtWHw5rDVJgNNsivKaI1UvZI8TfxISpr' 'readToken' STORE
+  
+     $readToken AUTHENTICATE 20000 MAXOPS
+  
+  {
+      'token' $readToken
+      'class' 'alMoteurConvoyeur'
+      'labels' {}
+      'end' NOW
+      'start' NOW 0.05 h -
+  } FETCH 'datas' STORE
+  
+  
+  //$datas
+
+  // *** MACROMAPPER Convert value threshold to BOOL ***
+    [ 
+        $datas
+        <%
+            'input' STORE
+
+            $input 7 GET 0 GET 'value' STORE
+            $input 0 GET 'tick' STORE
+            
+            <% $value true == %>
+            <% 1 'newValue' STORE %>
+            <% 0 'newValue' STORE %> IFTE
+
+            [ $tick NaN NaN NaN $newValue ]
+
+        %> MACROMAPPER 
+        0 
+        0 
+        0
+    ] MAP
+
+     %>
+    }
   ]
   }
 </discovery-dashboard>
